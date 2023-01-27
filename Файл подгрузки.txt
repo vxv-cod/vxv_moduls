@@ -1,0 +1,10 @@
+
+vxvPatch.py положить по адрессу:
+C:\Users\vvkhomutskiy\AppData\Local\Programs\Python\Python37
+
+Скопировать в этот файл следующий текст:
+import sys
+sys.path.insert(1, "C:\\vxvproj\\vxv_moduls\\")
+
+Если требуется работать со своими модулями со со своим путем импортируем данный модуль для начала:
+import vxvPatch
