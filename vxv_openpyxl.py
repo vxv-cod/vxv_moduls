@@ -607,3 +607,177 @@ for col in ws.iter_cols(min_row=3, max_col=max_column, max_row=max_row):
         cell.border = bd
 # --------------------------------------------------------------
 
+'''Вставка/удаление строк/столбцов, перемещение диапазона ячеек.'''
+
+# Вставка строк и столбцов.
+# Удаление строк и столбцов.
+# Перемещение диапазона ячеек.
+# Вставка строк и столбцов.
+
+# Модуль openpyxl поддерживает вставку строк или столбцов. Что бы произвести указанные действия, необходимо использовать соответствующие методы экземпляра рабочего листа Worksheet:
+# Worksheet.insert_cols(idx, amount=1): вставляет столбец или столбцы перед col==idx. Аргумент amount - количество добавляемых столбцов.
+# Worksheet.insert_rows(idx, amount=1): вставляет строку или строки перед row==idx. Аргумент amount - количество добавляемых строк.
+# По умолчанию вставляется одна строка или столбец. Например, чтобы вставить одну строку перед существующей 7-ой строкой необходимо вызвать ws.insert_rows(7).
+# Пример:
+from openpyxl import Workbook
+wb = Workbook()
+ws = wb.active
+# создадим произвольные данные
+data = [[row*col for col in range(1, 16)] for row in range(1, 31)]
+# добавляем данные на активный лист
+for row in data:
+    ws.append(row)
+
+# вставим 3 новые строки перед 
+# существующей 7-ой строкой
+ws.insert_rows(7, 3)
+# сохраняем и смотрим
+wb.save('test.xlsx')
+
+'''# Удаление строк и столбцов.'''
+# Что бы удалить строки или столбцы, используйте следующие методы экземпляра рабочего листа Worksheet:
+# Worksheet.delete_cols(): удаляет столбец или столбцы, начиная с col==idx. Аргумент amount - количество удаляемых столбцов.
+# Worksheet.delete_rows(): удаляет строку или строки, начиная с row==idx. Аргумент amount - количество удаляемых строк.
+# По умолчанию удаляется одна строка или столбец. Например, чтобы удалить столбцы в диапазоне F:H необходимо вызвать ws.delete_cols(6, 3).
+# Пример - продолжение предыдущего:
+# удалим 3 столбцы в диапазоне `F:H`
+ws.delete_cols(6, 3)
+# сохраняемся и открываем файл
+wb.save('test.xlsx')
+# Примечание. При вставке или удалении строк или столбцов модуль openpyxl не управляет зависимостями, такими как формулы, таблицы, диаграммы и т.д. 
+# Считается, что это выходит за рамки библиотеки, которая фокусируется на управлении форматом файла. 
+# В общем, клиентский код должен реализовывать необходимую функциональность в любом конкретном случае.
+
+'''# Перемещение диапазона ячеек.'''
+# Модуль openpyxl обеспечивает перемещение диапазонов ячеек внутри листа методом:
+# Worksheet.move_range(cell_range, rows=0, cols=0, translate=False).
+# Этот метод перемещает диапазон ячеек cell_range на количество строк rows и/или столбцов cols:
+# вниз, если rows > 0, и вверх, если rows < 0,
+# вправо, если cols > 0, и влево, если cols < 0.
+# Существующие ячейки будут перезаписаны. Формулы и ссылки обновляться не будут.
+# Пример:
+ws.move_range("D4:F10", rows=-1, cols=2)
+# Это приведет к перемещению ячеек в диапазоне ячеек D4:F10 вверх на одну строку и вправо на два столбца. Ячейки будут перезаписаны всеми существующими ячейками.
+# Если ячейки содержат формулы, то openpyxl может транслировать их, но, поскольку это не всегда то, что нужно, по этому этот функционал умолчанию отключен. 
+# Кроме того, будут транслированы только формулы в самих ячейках. Ссылки на ячейки из других ячеек или определенные имена обновляться не будут. 
+# Для этого можно использовать переводчик формул синтаксического анализа:
+ws.move_range("G4:H10", rows=1, cols=1, translate=True)
+# Это приведет к перемещению относительных ссылок в формулах в диапазоне на одну строку и один столбец.
+
+
+from openpyxl import load_workbook
+
+wb = load_workbook('width-height.xlsx')
+ws = wb.active
+
+# для строк
+for i in range(1, ws.max_row+1):
+    # если высота строки не изменялась программно
+    # или вручную то `rh` будет присваиваться `None` 
+    rh = ws.row_dimensions[i].height
+    # по умолчанию высота строки равна 15 единицам
+    row_heights = 15 if rh is None else rh
+    print(f'Строка {i} имеет высоту {row_heights}')
+
+# ну и для колонок
+from openpyxl.utils.cell import get_column_letter
+for i in range(1, ws.max_column+1):
+    # преобразовываем индекс столбца в его букву
+    letter = get_column_letter(i)
+    # получаем ширину столбца
+    col_width = ws.column_dimensions[letter].width
+
+
+'''====================================================================='''
+'''Копирование строк из одного листа в другой'''
+# from copy import copy
+# from openpyxl import load_workbook
+
+# def copy_cell(src_sheet, src_row, src_col, 
+#               tgt_sheet, tgt_row, tgt_col,
+#               copy_style=True):
+#     cell = src_sheet.cell(src_row, src_col)
+#     new_cell = tgt_sheet.cell(tgt_row, tgt_col, cell.value)
+#     if cell.has_style and copy_style:
+#         new_cell._style = copy(cell._style)
+
+# foldrer = r"C:\vxvproj\tnnc-Excel\collectorExcel\collectorApp\temp"
+# filename = r"\888888.xlsx"
+# failstart = foldrer + filename
+# wb = load_workbook(failstart)
+# ws1 = wb['Лист1']
+# ws2 = wb['Лист2']
+
+
+# ws1_last_row = ws1.max_row
+
+# for i, row in enumerate(ws1.iter_rows(min_row=2, max_row=3)):
+# # for i, row in enumerate(ws2.iter_rows(min_row=2, max_col=3, max_row=1, values_only=True), 1):
+#     for cell in row:
+#         copy_cell(ws1, cell.row, cell.column, 
+#                   ws2, ws2_last_row+i, cell.column)
+
+# outfail = foldrer + r"\999.xlsx"
+# wb.save(outfail)
+# Excel = win32com.client.gencache.EnsureDispatch('Excel.Application')
+# wb = Excel.Workbooks.Open(outfail)
+
+# Excel.Visible = 1
+# Excel.DisplayAlerts = False
+'''====================================================================='''
+'''====================================================================='''
+'''Копировоание строк из одного файла в другой'''
+# from openpyxl import Workbook
+
+# from copy import copy
+# from openpyxl import load_workbook
+
+# def copy_cell(src_sheet, src_row, src_col, 
+#               tgt_sheet, tgt_row, tgt_col,
+#               copy_style=True):
+#     cell = src_sheet.cell(src_row, src_col)
+#     new_cell = tgt_sheet.cell(tgt_row, tgt_col, cell.value)
+#     # if cell.has_style and copy_style:
+#     #     new_cell._style = copy(cell._style)
+#     new_cell.font = copy(cell.font)
+#     new_cell.alignment = copy(cell.alignment)
+
+# foldrer = r"C:\vxvproj\tnnc-Excel\collectorExcel\collectorApp\temp"
+# filename = r"\888888.xlsx"
+# failstart = foldrer + filename
+# outfail = foldrer + r"\999.xlsx"
+# print(outfail)
+
+# wbcopy = load_workbook(failstart)
+# wbcopy2 = load_workbook(outfail)
+# wbxxx = Workbook()
+# # wbxxx = load_workbook(foldrer + r"\pppppppppppppp.xlsx")
+
+# ws1 = wbcopy['Лист1']
+# ws2 = wbcopy2['Лист1']
+# # ws3 = wbxxx.create_sheet("Лист1")
+# ws3 = wbxxx.active
+
+# for iii, u  in enumerate([ws1, ws2]):
+#     ws3_last_row = ws3.max_row
+
+#     for i, row in enumerate(u.iter_rows(min_row=1, max_row=ws1.max_row), start=1):
+#         print("i = ", i)
+#         ws2_last_row = ws2.max_row + 1
+#         for cell in row:
+#             copy_cell(u, cell.row, cell.column, 
+#                     ws3, ws3_last_row + i, cell.column)
+
+# wbxxx.save(foldrer + r"\pppppppppppppp.xlsx")
+# wbcopy.close()
+# wbcopy2.close()
+# wbxxx.close()
+
+
+# Excel = win32com.client.gencache.EnsureDispatch('Excel.Application')
+# wb = Excel.Workbooks.Open(foldrer + r"\pppppppppppppp.xlsx")
+
+# Excel.Visible = 1
+# Excel.DisplayAlerts = False
+'''====================================================================='''
+

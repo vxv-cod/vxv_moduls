@@ -381,7 +381,9 @@ print("-------------------------------------")
 '''Объединение ячеек'''
 # cel.Merge()
 # cel.MergeCells = True
-# cel.UnMerge
+'''Отмена Объединения ячеек'''
+# cel.UnMerge()
+# Selection.UnMerge()
 
 '''Перенести текст'''
 # cel.WrapText = True
@@ -469,11 +471,30 @@ print("-------------------------------------")
 # sheet.Shapes("Диаграмма 2").Width = 1200
 # sheet.Shapes("Диаграмма 1").Width = 1200
 
+'''----------------------------------------------------------------------------------'''
+'''Сортируем строчки по ключу колонки E'''
+# def mysort(listColumns):
+#     '''Сортируем строчки по ключу колонок'''
+#     EndRow = sheet.Cells(sheet.Rows.Count, 3).End(3).Row
+#     sheet.Sort.SortFields.Clear()
+#     for col in listColumns:
+#         # sheet.Sort.SortFields.Add(Key=sheet.Range(f"{col}{StartRow}:{col}{EndRow}"))
+#         sheet.Sort.SortFields.Add(
+#                                     Key=sheet.Range(f"{col}{StartRow}:{col}{EndRow}"), 
+#                                     SortOn = 0,
+#                                     Order = 1,
+#                                     DataOption = 0
+#                                     )
+#     sor = sheet.Sort
+#     data = sheet.Range(sheet.Cells(StartRow, StartColl), sheet.Cells(EndRow, EndColl))
+#     sor.SetRange(data)
+#     sleep(0.5)
+#     sor.Apply()
+#     data.UnMerge
 
-
-
-
-
+# mysort(["H"])
+# mysort(["O", "M", "P", "R", "Q", "N"])
+'''----------------------------------------------------------------------------------'''
 
 
 
