@@ -779,5 +779,57 @@ for i in range(1, ws.max_column+1):
 
 # Excel.Visible = 1
 # Excel.DisplayAlerts = False
+
+'''====================================================================='''
+
+'''Настраиваем область печати'''
+
+import win32com.client
+import openpyxl.utils
+
+
+# Открываем книгу
+# wb = openpyxl.load_workbook(r"C:\vxvproj\Smets_for_Subpodryd\xxx\55555-Р-666.777.888-СМ-01-ЛР-003-rC01 02-10-03.xlsx")
+wb = openpyxl.load_workbook(r"C:\vxvproj\Smets_for_Subpodryd\xxx\02-10-01 ЛВР.xlsx")
+ 
+# Выбираем лист
+ws = wb.active
+ 
+# Ищем область с заполненными ячейками
+max_row = ws.max_row
+max_column = ws.max_column
+ 
+# Задаем область печати на основе найденной области с заполненными ячейками
+ws.print_area = 'A1:' + openpyxl.utils.get_column_letter(max_column) + str(max_row)
+ 
+# Задаем формат листа
+ws.page_setup.paperSize = ws.PAPERSIZE_A4
+ 
+# Задаем ориентацию печати
+ws.page_setup.orientation = ws.ORIENTATION_LANDSCAPE
+ 
+# Установка масштаба страницы
+if ws.sheet_properties.pageSetUpPr is None:
+    ws.sheet_properties.pageSetUpPr = openpyxl.SheetProperties()
+ws.sheet_properties.pageSetUpPr.fitToPage = True
+ws.page_setup.fitToWidth = 1
+ws.page_setup.fitToHeight = 1000
+
+# Задаем поля для печати
+ws.page_margins.left = 0.7
+ws.page_margins.right = 0.2
+ws.page_margins.top = 0.2
+ws.page_margins.bottom = 0.3
+
+# Сохраняем изменения в книге
+fileres = r'C:\vxvproj\Smets_for_Subpodryd\xxx\example.xlsx'
+wb.save(fileres)
+
+Excel = win32com.client.gencache.EnsureDispatch('Excel.Application')
+wb = Excel.Workbooks.Open(fileres)
+Excel.Visible = 1
+Excel.DisplayAlerts = False
+
+
 '''====================================================================='''
 

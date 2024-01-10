@@ -1419,8 +1419,6 @@ for paragraph in doc.paragraphs:
 for i, val in enumerate(doc.paragraphs): print(i, val.text)
 '''------------------------------------------------'''
 
-
-
 def testprog(doc, NameFaileDoc):
     """Создаем COM объект Word для просмотра результата"""
     import win32com.client, os
@@ -1437,3 +1435,28 @@ def testprog(doc, NameFaileDoc):
     Word.Documents.Open(os.getcwd() + f"\\{NameFaileDoc}")
 
 # testprog(doc, NameFaileDoc)
+
+
+'''------------------------------------------------'''
+'''Заменяем текст в каждом прогоне каждого параграфа'''
+def replaceItem(run, key, resp, bold=None):
+    '''Читаем параграф и заменяем текст'''
+    run.text = run.text.replace(key, resp[key])
+
+paragraphs = doc.paragraphs
+# перебираем все параграфы
+for paragraph in paragraphs:
+    # перебираем все прогоны в параграфе
+    for run in paragraph.runs:
+        # Для каждого респонса
+        for respo in [data_contract, data_act]:
+            # для каждого ключа респонса
+            for key in respo:
+                # сверяем сходится ли ключ с текстом в параграфе
+                if key in run.text:
+                    replaceItem(run, key, respo)
+'''------------------------------------------------'''
+# печатаем текст во всех параграфах по всем прогонам
+for paragraph in doc.paragraphs:
+    print([run.text for run in paragraph.runs])
+'''------------------------------------------------'''

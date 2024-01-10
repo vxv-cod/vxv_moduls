@@ -419,6 +419,10 @@ print("-------------------------------------")
 '''Очистить содержимое строчек'''
 # sheet.Rows(f"{StartRow}:{EndRow}").ClearContents()
 
+'''Добавление листа'''
+# sheet = wb.Sheets.Add(After=wb.Worksheets[wb.Worksheets.Count])
+# sheet.Name = "Печать"
+
 '''Копируем лист'''
 # sheet.Copy(After=wb.Worksheets[wb.Worksheets.Count])
 
@@ -430,6 +434,14 @@ print("-------------------------------------")
 # cel = RangeCells(sheet, StartRow, StartCol, EndRow, EndCol)
 # cel.Activate()
 # sheet.Paste()
+
+'''Копируем колонки содного листа на другой'''
+# sheet.Columns("L:Q").Copy()
+# sheetPechat.Columns('A').Select
+# Excel.Selection.Insert()
+# '''или'''
+# sheet.Range(sheet.Columns(2), sheet.Columns(5)).Copy()
+
 
 '''Подчеркнутый текст в ячейке'''
 # cel.Font.Underline = 2

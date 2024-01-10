@@ -68,3 +68,111 @@ if isinstance(item, str):
     pass
 
 '''----------------------------------------------------------------------'''
+
+
+ui.tableWidget.setColumnWidth(0, 100)
+ui.tableWidget.setColumnWidth(2, 170)
+# header = ui.tableWidget.horizontalHeader()
+# header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+# header.setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)     
+# header.setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch)
+
+# ui.plainTextEdit_1 = QtWidgets.QPlainTextEdit(Form)
+# ui.plainTextEdit_1.setPlaceholderText(_translate("Form", "XXX.XXX.XXX"))
+# ui.plainTextEdit_1.setFrameShape(QtWidgets.QFrame.NoFrame)
+# ui.tableWidget.setCellWidget(1, 2, ui.plainTextEdit_1)
+
+ui.textEdit = QtWidgets.QTextEdit(Form)
+ui.textEdit.setPlaceholderText(_translate("Form", "                 XXX.XXX.XXX"))
+ui.textEdit.setFrameShape(QtWidgets.QFrame.NoFrame)
+ui.textEdit.setAlignment(QtCore.Qt.AlignCenter)
+
+ui.tableWidget.setCellWidget(1, 2, ui.textEdit)
+
+'''----------------------------------------------------------------------'''
+'''Как найти все повторяющиеся элементы в списке и количество повторов?'''
+from collections import Counter
+A = [111, 222, 111, 333, 222, 111]
+counter = Counter(A)
+
+'''----------------------------------------------------------------------'''
+'''----------------------------------------------------------------------'''
+'''Как работает Pathlib?'''
+import pathlib
+Path() — это дочерний узел PurePath(), он обеспечивает операции обработки с возможностью выполнения процесса записи.
+
+# Когда вы инстанцируете Path(), он создает два класса для работы с путями Windows и отличных от Windows. 
+# Как и PurePath(), Path() также создает общий объект пути "agnostic path", 
+# независимо от операционной системы, в которой вы работаете.
+# свойства PurePath() аналогичны с Path()
+
+# Path().iterdir() возвращает содержимое каталога. Допустим, 
+# у нас есть следующая папка, содержащая следующие файлы:
+p = pathlib.Path('/data')
+
+for child in p.iterdir():
+    print(child)
+
+# Полный путь текущего файла
+p = pathlib.Path(__file__)
+__file__    # встроеная переменная, служит ссылкой на путь к файлу, в котором мы ее прописываем
+# тоже самое, но для работы в разных операционных системах
+Pure = pathlib.PurePath(__file__)
+# PurePath().parents[] выводит предков пути:
+# чем больше индекс, тем дальше родитель
+p = pathlib.PurePath('/src/goo/scripts/main.py')
+# '/src/goo/scripts'
+p.parents[0]
+# '/src/goo'
+p.parents[1]
+
+PurePath().name     # предоставляет имя последнего компонента вашего пути:
+# main.py
+pathlib.PurePath('/src/goo/scripts/main.py').name 
+# В свою очередь, PurePath().suffix предоставляет расширение файла 
+# последнего компонента вашего пути:
+pathlib.PurePath('/src/goo/scripts/main.py').suffix  # '.py'
+
+# выводит только имя конечного компонента вашего пути без суффикса:
+In [*]: pathlib.PurePath('/src/goo/scripts/main.py').stem                      
+Out[*]: 'main'
+
+PurePath().is_relative() проверяет, принадлежит ли данный путь другому заданному пути или нет:
+In [*]: p = pathlib.PurePath('/src/goo/scripts/main.py')
+        p.is_relative_to('/src')
+
+PurePath().joinpath() конкатенирует путь с заданными аргументами (дочерними путями):
+
+In [*]: p = pathlib.PurePath('/src/goo')
+        p.joinpath('scripts', 'main.py')
+
+Out[*]: PurePosixPath('/src/goo/scripts/main.py')
+
+PurePath().match() проверяет, соответствует ли путь заданному шаблону:
+
+In [*]: pathlib.PurePath('/src/goo/scripts/main.py').match('*.py')
+Out[*]: True
+
+In [*]: pathlib.PurePath('/src/goo/scripts/main.py').match('goo/*.py')
+Out[*]: True
+
+In [*]: pathlib.PurePath('src/goo/scripts/main.py').match('/*.py')
+Out[*]: False
+
+PurePath().with_stem() изменяет только имя последнего компонента пути:
+
+In [*]: p = pathlib.PurePath('/src/goo/scripts/main.py')
+        p.with_stem('app.py')
+
+PurePath().with_suffix() временно изменяет суффикс или расширение последнего компонента пути:  
+
+In [*]: p = pathlib.PurePath('/src/goo/scripts/main.py')
+        p.with_suffix('.js')
+Out[*]: PurePosixPath('/src/goo/scripts/main.js')        
+
+Если имя заданного пути не содержит суффикса, метод .with_suffix() добавляет суффикс за вас:
+
+In [*]: p = pathlib.PurePath('/src/goo/scripts/main')
+        p.with_suffix('.py')
+Out[*]: PurePosixPath('/src/goo/scripts/main.py')
+'''----------------------------------------------------------------------'''
