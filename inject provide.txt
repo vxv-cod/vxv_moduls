@@ -1,0 +1,12 @@
+provide() {
+	return {
+	todoLength: this.testProvide,
+	todoLength: computed(() => this.desserts.length),
+	res:  () => computed(() => this.result)
+	}
+	},
+
+inject: [
+	'todoLength',
+	'res',
+	],

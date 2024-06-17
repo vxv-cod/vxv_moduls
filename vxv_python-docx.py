@@ -2,6 +2,11 @@
 
 '''# Открытие/создание документа'''
 from docx import Document
+from docx.document import Document
+from docx.parts.document import DocumentPart
+from docx.parts.styles import StylesPart
+
+
 
 # создание документа
 document = Document()
@@ -13,7 +18,8 @@ document = Document('/path/to/document.docx')
 from docx import Document
 from docx.shared import Pt
 
-doc = Document()
+doc: DocumentPart = Document()
+
 # задаем стиль текста по умолчанию
 style = doc.styles['Normal']
 # название шрифта

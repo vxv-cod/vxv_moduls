@@ -1,0 +1,7 @@
+Назначаить другую программу: 
+FTYPE batfile="C:\Users\vvkhomutskiy\Documents\vxv\Distr\Windows Terminal\Microsoft.WindowsTerminal_1.19.10821.0_x64\terminal-1.19.10821.0\WindowsTerminal.exe" %1
+
+
+Вернуть по умолчанию через CMD:
+ASSOC .bat=batfile
+FTYPE batfile=%SystemRoot%\System32\cmd.exe /C "%1" %*
